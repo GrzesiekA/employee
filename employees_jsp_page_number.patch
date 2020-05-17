@@ -1,0 +1,71 @@
+Index: src/main/java/pl/sda/java/web/employee/service/EmployeeService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/pl/sda/java/web/employee/service/EmployeeService.java	(revision 079216dbc7910bfedc3b74d8ae97f7e25a8b67a0)
++++ src/main/java/pl/sda/java/web/employee/service/EmployeeService.java	(date 1589720471652)
+@@ -31,6 +31,7 @@
+                     .records(empQuery.getResultList())
+                     .build();
+ 
++
+         });
+     }
+ }
+Index: src/main/webapp/WEB-INF/jsp/employees.jsp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/webapp/WEB-INF/jsp/employees.jsp	(revision 079216dbc7910bfedc3b74d8ae97f7e25a8b67a0)
++++ src/main/webapp/WEB-INF/jsp/employees.jsp	(date 1589730713541)
+@@ -8,17 +8,41 @@
+   </tr>
+   <tr>
+     <th colspan="2">
++      <c:set var="dotSign" value="..."/>
++
+       <c:set var="initialPage" value="1"/>
+-      <c:if test = "${employees.currentPage - 5 > 0}">
+-        <c:set var="initialPage" value="${employees.currentPage - 5}"/>
++
++      <c:if test = "${employees.currentPage - 5 > 2}">
++         <c:set var="initialPage" value="${employees.currentPage - 5}"/>
++         <a href="?showPage=1">${1}</a>
++         <a href="?showPage=${employees.currentPage - 6}">${dotSign}</a>
+       </c:if>
+-      <c:forEach var = "i" begin = "${initialPage}" end = "${employees.currentPage - 1}">
++         <c:forEach var = "i" begin = "${initialPage}" end = "${employees.currentPage - 1}">
+          <a href="?showPage=${i}">${i}</a>
+       </c:forEach>
+-        Page ${employees.currentPage}
+-      <c:forEach var = "i" begin = "${employees.currentPage + 1}" end = "${employees.currentPage + 5}">
+-         <a href="?showPage=${i}">${i}</a>
+-      </c:forEach>
++
++       Page ${employees.currentPage}
++
++
++
++<c:choose>
++      <c:when test = "${employees.maxPage - employees.currentPage > 6}">
++         <c:forEach var = "i" begin = "${employees.currentPage + 1}" end = "${employees.currentPage + 5}">
++           <a href="?showPage=${i}">${i}</a>
++         </c:forEach>
++         <a href="?showPage=${employees.currentPage + 6}">${dotSign}</a>
++         <a href="?showPage=${employees.maxPage}">${employees.maxPage}</a>
++         <br />
++      </c:when>
++
++     <c:otherwise>
++         <c:forEach var = "i" begin = "${employees.currentPage + 1}" end = "${employees.maxPage}">
++           <a href="?showPage=${i}">${i}</a>
++         </c:forEach>
++        <br />
++    </c:otherwise>
++</c:choose>
++
+     </th>
+   </tr>
+   </thead>
